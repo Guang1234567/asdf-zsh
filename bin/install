@@ -8,4 +8,14 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=./lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
+# build from source code
+echo "==> build from source code"
+
+cd "${ASDF_DOWNLOAD_PATH}"
+
+./configure --prefix="${ASDF_INSTALL_PATH}" --enable-fndir="${ASDF_INSTALL_PATH}/share/zsh/functions" --enable-scriptdir="${ASDF_INSTALL_PATH}/share/zsh/scripts" --enable-site-fndir=/usr/local/share/zsh/site-functions --enable-site-scriptdir=/usr/local/share/zsh/site-scripts --enable-runhelpdir="${ASDF_INSTALL_PATH}/share/zsh/help" --enable-cap --enable-maildir-support --enable-multibyte --enable-pcre --enable-zsh-secure-free --enable-unicode9 --enable-etcdir=/etc --with-tcsetpgrp DL_EXT=bundle
+make install
+
+echo "<== build from source code"
+
 install_version "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"

@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for <YOUR TOOL>.
-GH_REPO="<TOOL REPO>"
-TOOL_NAME="<YOUR TOOL>"
-TOOL_TEST="<TOOL CHECK>"
+GH_REPO="https://git.code.sf.net/p/zsh/code"
+TOOL_NAME="zsh"
+TOOL_TEST="zsh --version"
 
 fail() {
 	echo -e "asdf-$TOOL_NAME: $*"
@@ -30,10 +30,14 @@ list_github_tags() {
 		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
 }
 
+filter_releases() {
+	grep -o -e '^zsh-\(.\+\)\(\.[0-9]\)\+$' | cut -d- -f2
+}
+
 list_all_versions() {
 	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
 	# Change this function if <YOUR TOOL> has other means of determining installable versions.
-	list_github_tags
+	list_github_tags | sort_versions | filter_releases
 }
 
 download_release() {
@@ -42,7 +46,7 @@ download_release() {
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for <YOUR TOOL>
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="https://downloads.sourceforge.net/project/zsh/zsh/${version}/zsh-${version}.tar.xz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
